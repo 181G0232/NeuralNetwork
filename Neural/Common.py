@@ -1,13 +1,28 @@
-import numpy as np
+import math
 
-def sigmoid(x):
-    return 1.0 / (1.0 + np.exp(-x))
+def cost(activation, expect):
+    tmp = ((expect - activation) ** 2.0) / 2.0
+    return tmp
 
-def sigmoid_derivate(x):
-    return sigmoid(x) * (1.0 - sigmoid(x))
+# sigmoide
+def activation(signal):
+    # tmp = 1.0 / (1.0 + math.exp(-signal))
+    tmp = math.tanh(signal)
+    return tmp
 
-def tanh(x):
-    return np.tanh(x)
+# sigmoide derivate
+def dactivation(signal):
+    # tmp = activation(signal) * (1.0 - activation(signal))
+    tmp = 1.0 - (activation(signal) ** 2)
+    return tmp
+
+def derror(signal, activation, expect):
+    tmp = (expect - activation) * dactivation(signal)
+
+# update last derror: derror(signale, activation, expect)
+# update last gradient: signal * derror
+
+# update last-1 derror: weight * dactivation(signal) * derror
+# update last-1 gradient: signal * derror
+
  
-def tanh_derivate(x):
-    return np.arccos(x)**2

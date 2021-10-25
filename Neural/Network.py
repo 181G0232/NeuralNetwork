@@ -1,41 +1,35 @@
 from .Layer import *
 
 class Network:
-    
-    def __init__(self, layout:list) -> None:
+
+    def __init__(self, layout):
         self.layers = []
         for i in range(1, len(layout)):
-            self.layers.append(Layer(layout[i], layout[i - 1]))
+            l = Layer(layout[i], layout[i - 1])
+            self.layers.append(l)
 
-    def edict(self, ins:list) -> list:
+    def edict(self, activations):
         for l in self.layers:
-            ins = l.edict(ins)
-        return ins
+            activations = l.edict(activations)
+        return activations
 
-    def edictDetails(self, ins:list) -> list:
+    def details(self, activations):
         details = []
         for l in self.layers:
-            details.append(ins)
-            ins = l.edict(ins)
+            details.append(activations)
+            activations = l.edict(activations)
+        details.append(activations)
         return details
 
-    def fit(self, ins:list, errors:list) -> None:
-        details = self.edictDetails(ins)
+    def train(self, activations, derrors):
+        details = self.details(activations)
         details.reverse()
-        details.append(ins)
         layers = list(self.layers)
         layers.reverse()
         for i in range(len(layers)):
-            errors = layers[i].fit(details[i], errors)
+            derrors = layers[i].train(details[i + 1], derrors)
 
-    def train(self, ins:list, expecteds:list) -> None:
-        edicts = self.edict(ins)
-        errors = []
-        for i in range(len(expecteds)):
-            errors.append(expecteds[i] - edicts[i])
-        self.fit(ins, errors)
-
-    def print(self) -> None:
-        for l in self.layers:
-            l.print()
-        
+    def print(self):
+        for i in range(len(self.layers)):
+            print("--- Layer {} ---".format(i))
+            self.layers[i].print()

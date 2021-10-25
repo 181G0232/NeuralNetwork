@@ -1,43 +1,32 @@
-from .Common import *
 from .Neuron import *
-
 
 class Layer:
 
-    def __init__(self, nc: int, wc: int) -> None:
+    def __init__(self, nc, wc):
         self.neurons = []
-        for i in range(nc):
-            self.neurons.append(Neuron(wc))
+        for _ in range(nc):
+            neuron = Neuron(wc)
+            self.neurons.append(neuron)
 
-    def print(self) -> None:
+    def edict(self, activations):
+        edicts = []
         for n in self.neurons:
-            print(n)
+            e = n.edict(activations)
+            edicts.append(e)
+        return edicts
 
-    def edict(self, ins: list) -> list:
-        outs = []
-        for n in self.neurons:
-            outs.append(n.edict(ins))
-        return outs
+    def train(self, activations, derrors):
+        berrors = []
+        for _ in range(len(activations)):
+            berrors.append(0.0)
+        for i in range(len(self.neurons)):
+            bes = self.neurons[i].train(activations, derrors[i])
+            for j in range(len(bes)):
+                berrors[j] += bes[j]
+        # for k in range(len(berrors)):
+        #    berrors[k] /= len(self.neurons)
+        return berrors
 
-    def fit(self, ins: list, errors: list) -> list:
-        gradients = []
-        for _ in range(len(ins)):
-            gradients.append(0.0)
-        #
-        for i in range(len(errors)):
-            grads = self.neurons[i].fit(ins, errors[i])
-            for j in range(len(ins)):
-                gradients[j] += grads[j]
-        #
-        return gradients
-
-    def train(self, ins: list, expecteds: list) -> None:
-        edicts = self.edict(ins)
-        errors = []
-        for i in range(len(expecteds)):
-            errors.append(expecteds[i] - edicts[i])
-        self.fit(ins, errors)
-
-    def print(self) -> None:
+    def print(self):
         for n in self.neurons:
             n.print()

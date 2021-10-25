@@ -1,40 +1,35 @@
+import math
+import random
 from .Common import *
-
 
 class Neuron:
 
-    def __init__(self, n: int) -> None:
+    def __init__(self, n):
         self.weights = []
-        for _ in range(0, n):
-            self.weights.append(1.0)
-            self.bias = 1.0
+        for _ in range(n):
+            self.weights.append(float(random.randint(-1, 1)))
+        self.bias = random.randint(-1, 1)
 
-    def edict(self, ins: list) -> float:
-        out = 0.0
+    def ponderate(self, activations):
+        ponderation = 0.0
         for i in range(len(self.weights)):
-            out = out + self.weights[i] * ins[i]
-        out += self.bias * 1.0
-        return sigmoid(out)
+            ponderation += activations[i] * self.weights[i]
+        ponderation += self.bias
+        return ponderation
 
-    def fit(self, ins: list, error: float) -> list:
-        out = 0.0
+    def edict(self, activations):
+        return activation(self.ponderate(activations))
+
+    def train(self, activations, derror):
+        signal = self.ponderate(activations)
+        derror *= dactivation(signal)
+        berrors = []
         for i in range(len(self.weights)):
-            out += self.weights[i] * ins[i]
-        out += self.bias * 1.0
-        out = sigmoid_derivate(out)
-        #
-        responsability = error * out
-        gradients = []
-        for i in range(len(self.weights)):
-            dw = responsability * ins[i]
-            gradients.append(dw)
-            self.weights[i] += (dw * 0.1)
-        self.bias += responsability
-        return gradients
+            self.weights[i] += derror * activations[i] * 0.1
+            be = derror * self.weights[i]
+            berrors.append(be)
+        self.bias += derror * 0.1
+        return berrors
 
-    def train(self, ins: list, expected: float):
-        error = expected - self.edict(ins)
-        self.fit(ins, error)
-
-    def print(self) -> None:
-        print("{}:{}".format(self.weights, self.bias))
+    def print(self):
+        print("{}|{}".format(self.weights, self.bias))
