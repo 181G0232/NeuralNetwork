@@ -23,8 +23,6 @@ class Layer:
             bes = self.neurons[i].train(activations, derrors[i])
             for j in range(len(bes)):
                 berrors[j] += bes[j]
-        # for k in range(len(berrors)):
-        #    berrors[k] /= len(self.neurons)
         return berrors
 
     def print(self):

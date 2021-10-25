@@ -1,20 +1,12 @@
 from Neural import *
 
-network = Network([2, 3, 2])
+network = Network([2, 4, 3])
 
 expecteds = [
-    [[0, 0], [0, 1]],
-    [[0, 1], [0, 1]],
-    [[0, -1], [0, 1]],
-    [[0.5, 1], [-1, 1]],
-    [[0.5, -1], [1, 1]],
-    [[0.5, 0], [0, 1]],
-    [[1, 1], [0, -1]],
-    [[1, -1], [0, -1]],
-    [[1, 0], [0, -1]],
-    [[-1, 0], [0, 1]],
-    [[-1, -1], [0, 1]],
-    [[-1, 1], [0, 1]]
+    [[0, 0], [0, 0, 0]],
+    [[0, 1], [1, 0, 1]],
+    [[1, 0], [1, 0, 1]],
+    [[1, 1], [1, 1, 0]]
 ]
 
 def train(times):
@@ -33,9 +25,16 @@ def test():
         print("{} -> {}".format(e, outs))
 
 while True:
-    test()
-    option = input("train? : ")
-    if option == 'y':
+    option = input("train or test? : ")
+    if option == "print":
+        network.print()
+    elif option == "train":
         train(1000)
-    elif option == 'n':
+        test()
+    elif option == "test":
+        x = float(input("x: "))
+        y = float(input("y: "))
+        rs = network.edict([x, y])
+        print("rs: {}".format(rs))
+    elif option == 'exit':
         break
