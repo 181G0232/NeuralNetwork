@@ -4,13 +4,13 @@ def cost(activation, expect):
     tmp = ((expect - activation) ** 2.0) / 2.0
     return tmp
 
-# sigmoide
+# tanh
 def activation(signal):
     # tmp = 1.0 / (1.0 + math.exp(-signal))
     tmp = math.tanh(signal)
     return tmp
 
-# sigmoide derivate
+# tanh derivate
 def dactivation(signal):
     # tmp = activation(signal) * (1.0 - activation(signal))
     tmp = 1.0 - (activation(signal) ** 2)
@@ -19,7 +19,7 @@ def dactivation(signal):
 def derror(signal, activation, expect):
     tmp = (expect - activation) * dactivation(signal)
 
-# update last derror: derror(signale, activation, expect)
+# update last derror: derror(signal, activation, cost)
 # update last gradient: signal * derror
 
 # update last-1 derror: weight * dactivation(signal) * derror
