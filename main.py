@@ -22,7 +22,11 @@ def test():
     network.print()
     for e in expecteds:
         outs = network.edict(e[0])
-        print("{} -> {}".format(e, outs))
+        print("{} -> [".format(e), end="")
+        print("%.2f" % outs[0], end="")
+        for i in range(1, len(outs)):
+            print(", %.2f" % outs[i], end="")
+        print("]")
 
 while True:
     option = input("train or test? : ")
@@ -35,6 +39,9 @@ while True:
         x = float(input("x: "))
         y = float(input("y: "))
         rs = network.edict([x, y])
-        print("rs: {}".format(rs))
+        print("[%.2f" % rs[0], end="")
+        for i in range(1, len(rs)):
+            print(", %.2f" % rs[i], end="")
+        print("]")
     elif option == 'exit':
         break

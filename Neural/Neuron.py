@@ -32,4 +32,7 @@ class Neuron:
         return berrors
 
     def print(self):
-        print("{}|{}".format(self.weights, self.bias))
+        print("[", end="")
+        for w in self.weights:
+            print("%.2f, " % w, end="")
+        print("%.2f]" % self.bias)
